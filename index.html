@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bits Rush - Corrida dos Bits</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>Corrida dos Bits - FATEC CAMPINAS</h1>
+    <button id="open-manual" title="Manual">?</button>
+  </header>
+  <main>
+    <div id="game-ui">
+      <div id="score"><span class="ui-label">Score</span> <span class="ui-text">0</span></div>
+      <div id="combo"><span class="ui-label">Combo</span> <span class="ui-text">0</span></div>
+      <div id="lives"><span class="ui-label">Vidas</span> <span class="ui-text">❤️❤️❤️</span></div>
+    </div>
+    <div id="game-container">
+      <canvas id="game-canvas" width="900" height="350" tabindex="0" aria-label="Jogo Bits Rush"></canvas>
+      <div id="start-screen">
+        <h2>Bits Rush</h2>
+        <p>Pressione <b>ESPAÇO</b> para começar</p>
+        <button id="start-button">Jogar</button>
+      </div>
+      <div id="end-screen" class="hidden">
+        <div id="final-mascot"><img id="final-mascot-img" src="" alt="Mascote Final"></div>
+        <h2>🎉 Missão Concluída</h2>
+        <div class="final-stats">
+          <div>Pontuação Final: <span id="final-score">0</span></div>
+          <div>Combo Máximo: <span id="max-combo">0</span></div>
+        </div>
+        <p>Você superou os obstáculos da programação!<br>
+        Inscreva-se no curso de ADS da FATEC Campinas e programe seu futuro!</p>
+        <a href="https://www.vestibularfatec.com.br/" target="_blank" class="btn">INSCREVER-SE</a>
+        <button id="retry-button">Jogar Novamente</button>
+      </div>
+    </div>
+    <div id="message-box">
+      <span id="message-text"></span>
+      <span id="message-cursor"></span>
+      <button id="close-message" title="Fechar mensagem" aria-label="Fechar mensagem">×</button>
+      <div id="message-history" class="hidden"></div>
+    </div>
+    <div id="manual-modal" class="modal hidden" aria-modal="true" role="dialog">
+      <div class="modal-content">
+        <button id="close-manual" aria-label="Fechar Manual">×</button>
+        <h2>Bits Rush Manual</h2>
+        <h3>Itens Bônus</h3>
+        <div class="manual-grid items">
+          <div class="manual-item"><span class="emoji">💡</span><span>Lógica de Programação<br>+15 pts</span></div>
+          <div class="manual-item"><span class="emoji">📘</span><span>Estudo<br>+20 pts</span></div>
+          <div class="manual-item"><span class="emoji">🧠</span><span>Raciocínio Lógico<br>+25 pts</span></div>
+        </div>
+        <h3>Obstáculos</h3>
+        <div class="manual-grid obstacles">
+          <div class="manual-item"><span class="emoji">🐞</span><span>Bug<br>-1 vida</span></div>
+          <div class="manual-item"><span class="emoji">🚫</span><span>Erro 404<br>-1 vida</span></div>
+          <div class="manual-item"><span class="emoji">📱</span><span>Distração<br>-1 vida</span></div>
+        </div>
+        <p class="manual-controls">Use <b>ESPAÇO</b> para pular. Colete itens, evite obstáculos e faça combos!</p>
+      </div>
+    </div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
