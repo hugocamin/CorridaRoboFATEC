@@ -743,9 +743,13 @@ class BitsRushGame {
   updateHighscoreList() {
     const highscores = JSON.parse(localStorage.getItem('bitsrush_highscores') || '[]');
     if (this.highscoreList) {
-      this.highscoreList.innerHTML = highscores.map((h, i) =>
-        `<li><b>${h.initials}</b><span>—</span><span>${h.score}</span></li>`
-      ).join('') || '<li>Nenhum score ainda!</li>';
+      if (highscores.length === 0) {
+        this.highscoreList.innerHTML = '<li>Nenhum score ainda!</li>';
+      } else {
+        this.highscoreList.innerHTML = highscores.map(h =>
+          `<li><b>${h.initials}</b><span>—</span><span>${h.score}</span></li>`
+        ).join('');
+      }
     }
     // Exibe/oculta mensagem de vazio
     const emptyDiv = document.querySelector('.highscore-empty');
@@ -753,9 +757,13 @@ class BitsRushGame {
       emptyDiv.style.display = highscores.length === 0 ? 'block' : 'none';
     }
     // Corrige alinhamento torto: força todos os spans a terem largura mínima
-    const spans = this.highscoreList?.querySelectorAll('li span');
-    if (spans) {
-      spans.forEach(span => { span.style.minWidth = '60px'; span.style.display = 'inline-block'; span.style.textAlign = 'center'; });
+    if (this.highscoreList) {
+      const spans = this.highscoreList.querySelectorAll('li span');
+      spans.forEach(span => {
+        span.style.minWidth = '60px';
+        span.style.display = 'inline-block';
+        span.style.textAlign = 'center';
+      });
     }
   }
 
