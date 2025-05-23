@@ -3,67 +3,243 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bits Rush - Corrida dos Bits</title>
+  <title>Corrida dos Bits</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <header>
-    <h1>Corrida dos Bits - FATEC CAMPINAS</h1>
-    <button id="open-manual" title="Manual">?</button>
+    <div class="header-titles">
+      <h1 class="main-title">Corrida dos Bits</h1>
+      <span class="subtitle">FATEC CAMPINAS</span>
+    </div>
+    <nav id="header-icons" role="navigation" aria-label="Menu principal">
+      <button id="open-manual" title="Manual do Jogo" aria-label="Abrir manual do jogo">
+        <i class="fas fa-question"></i>
+      </button>
+      <button id="open-highscore" title="Melhores Pontuações" aria-label="Ver melhores pontuações">
+        <i class="fas fa-trophy"></i>
+      </button>
+      <button id="open-about" title="Sobre o Jogo" aria-label="Informações sobre o jogo">
+        <i class="fas fa-info-circle"></i>
+      </button>
+    </nav>
   </header>
+
   <main>
-    <div id="game-ui">
-      <div id="score"><span class="ui-label">Score</span> <span class="ui-text">0</span></div>
-      <div id="combo"><span class="ui-label">Combo</span> <span class="ui-text">0</span></div>
-      <div id="lives"><span class="ui-label">Vidas</span> <span class="ui-text">❤️❤️❤️</span></div>
-    </div>
-    <div id="game-container">
-      <canvas id="game-canvas" width="900" height="350" tabindex="0" aria-label="Jogo Bits Rush"></canvas>
-      <div id="start-screen">
-        <h2>Bits Rush</h2>
-        <p>Pressione <b>ESPAÇO</b> para começar</p>
-        <button id="start-button">Jogar</button>
+    <section id="game-ui" aria-label="Interface do jogo">
+      <div class="ui-item">
+        <i class="fas fa-star ui-icon"></i>
+        <span class="ui-label">Score</span>
+        <span class="ui-text">0</span>
       </div>
-      <div id="end-screen" class="hidden">
-        <div id="final-mascot"><img id="final-mascot-img" src="" alt="Mascote Final"></div>
-        <h2>🎉 Missão Concluída</h2>
-        <div class="final-stats">
-          <div>Pontuação Final: <span id="final-score">0</span></div>
-          <div>Combo Máximo: <span id="max-combo">0</span></div>
+      <div class="ui-item">
+        <i class="fas fa-fire ui-icon"></i>
+        <span class="ui-label">Combo</span>
+        <span class="ui-text">0</span>
+      </div>
+      <div class="ui-item">
+        <i class="fas fa-heart ui-icon"></i>
+        <span class="ui-label">Vidas</span>
+        <span class="ui-text">❤️❤️❤️</span>
+      </div>
+    </section>
+
+    <section id="game-container" aria-label="Área do jogo" style="position:relative;">
+      <canvas id="game-canvas" width="900" height="350" tabindex="0" aria-label="Jogo Corrida dos Bits - Use ESPAÇO para pular"></canvas>
+      <button id="pause-btn" title="Pausar Jogo" aria-label="Pausar Jogo">
+        <i class="fas fa-pause"></i>
+      </button>
+      <div id="pause-overlay" class="hidden">
+        <span class="pause-text">PAUSE</span>
+      </div>
+      
+      <div id="start-screen" role="dialog" aria-labelledby="start-title">
+        <div class="start-content">
+          <div class="game-logo">
+            <i class="fas fa-gamepad" style="font-size: 2em; color: #00fff7; margin-bottom: 16px;"></i>
+            <h2 id="start-title">Corrida dos Bits</h2>
+          </div>
+          <div class="start-instructions">
+            <p><i class="fas fa-keyboard" style="margin-right: 8px;"></i>Pressione <kbd>ESPAÇO</kbd> para começar</p>
+            <p class="start-subtitle">Colete itens, evite obstáculos e teste suas habilidades!</p>
+          </div>
+          <button id="start-button" class="btn-primary">
+            <i class="fas fa-play" style="margin-right: 8px;"></i>Iniciar Jogo
+          </button>
         </div>
-        <p>Você superou os obstáculos da programação!<br>
-        Inscreva-se no curso de ADS da FATEC Campinas e programe seu futuro!</p>
-        <a href="https://www.vestibularfatec.com.br/" target="_blank" class="btn">INSCREVER-SE</a>
-        <button id="retry-button">Jogar Novamente</button>
       </div>
-    </div>
-    <div id="message-box">
-      <span id="message-text"></span>
-      <span id="message-cursor"></span>
-      <button id="close-message" title="Fechar mensagem" aria-label="Fechar mensagem">×</button>
+
+      <div id="end-screen" class="hidden" role="dialog" aria-labelledby="end-title">
+        <div class="end-content">
+          <div id="final-mascot">
+            <img id="final-mascot-img" src="" alt="Mascote Final">
+          </div>
+          <h2 id="end-title">🎉 Missão Concluída!</h2>
+          <div class="final-stats">
+            <div class="stat-item">
+              <i class="fas fa-star"></i>
+              <span>Pontuação Final:</span>
+              <strong id="final-score">0</strong>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-fire"></i>
+              <span>Combo Máximo:</span>
+              <strong id="max-combo">0</strong>
+            </div>
+          </div>
+          <div class="end-message">
+            <p>🚀 Você superou os obstáculos da programação!</p>
+            <p><strong>Inscreva-se no curso de ADS da FATEC Campinas e programe seu futuro!</strong></p>
+          </div>
+          <div class="end-actions">
+            <a href="https://www.vestibularfatec.com.br/" target="_blank" class="btn-primary" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; font-size: 1.1em; padding: 12px 28px; background: #00fff7; color: #181c2b; font-weight: bold; border: none; border-radius: 8px; text-decoration: none; box-shadow: 0 0 8px #00fff7; transition: background 0.2s; margin-right: 12px;">
+              <i class="fas fa-graduation-cap"></i>INSCREVER-SE
+            </a>
+            <button id="retry-button" class="btn-secondary">
+              <i class="fas fa-redo" style="margin-right: 8px;"></i>Jogar Novamente
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside id="message-box" role="complementary" aria-label="Terminal de mensagens">
+      <button id="close-message" title="Fechar terminal" aria-label="Fechar terminal de mensagens">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="terminal-header">
+        <i class="fas fa-terminal" style="margin-right: 8px;"></i>
+        <span>Terminal</span>
+      </div>
+      <div class="message-content">
+        <span id="message-text"></span>
+        <span id="message-cursor"></span>
+      </div>
       <div id="message-history" class="hidden"></div>
-    </div>
-    <div id="manual-modal" class="modal hidden" aria-modal="true" role="dialog">
+    </aside>
+
+    <!-- Modal do Manual -->
+    <div id="manual-modal" class="modal hidden" aria-modal="true" role="dialog" aria-labelledby="manual-title">
       <div class="modal-content">
-        <button id="close-manual" aria-label="Fechar Manual">×</button>
-        <h2>Bits Rush Manual</h2>
-        <h3>Itens Bônus</h3>
-        <div class="manual-grid items">
-          <div class="manual-item"><span class="emoji">💡</span><span>Lógica de Programação<br>+15 pts</span></div>
-          <div class="manual-item"><span class="emoji">📘</span><span>Estudo<br>+20 pts</span></div>
-          <div class="manual-item"><span class="emoji">🧠</span><span>Raciocínio Lógico<br>+25 pts</span></div>
+        <button id="close-manual" aria-label="Fechar Manual">
+          <i class="fas fa-times"></i>
+        </button>
+        <header class="modal-header">
+          <i class="fas fa-book" style="margin-right: 12px; color: #00fff7;"></i>
+          <h2 id="manual-title">Manual do Jogo</h2>
+        </header>
+        
+        <section class="manual-section">
+          <h3><i class="fas fa-gift" style="margin-right: 8px; color: #00ff7f;"></i>Itens Bônus</h3>
+          <div class="manual-grid items">
+            <div class="manual-item bonus">
+              <span class="emoji">🖥️</span>
+              <div class="item-info">
+                <strong>Lógica</strong>
+                <span class="points">+19 pts</span>
+              </div>
+            </div>
+            <div class="manual-item bonus">
+              <span class="emoji">💡</span>
+              <div class="item-info">
+                <strong>Estudo</strong>
+                <span class="points">+21 pts</span>
+              </div>
+            </div>
+            <div class="manual-item bonus">
+              <span class="emoji">💻</span>
+              <div class="item-info">
+                <strong>Raciocínio</strong>
+                <span class="points">+23 pts</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="manual-section">
+          <h3><i class="fas fa-exclamation-triangle" style="margin-right: 8px; color: #ff6b6b;"></i>Obstáculos</h3>
+          <div class="manual-grid obstacles">
+            <div class="manual-item obstacle">
+              <span class="emoji">🐞</span>
+              <div class="item-info">
+                <strong>Bug</strong>
+                <span class="damage">-1 vida</span>
+              </div>
+            </div>
+            <div class="manual-item obstacle">
+              <span class="emoji">🚫</span>
+              <div class="item-info">
+                <strong>Erro 404</strong>
+                <span class="damage">-1 vida</span>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="manual-controls">
+          <i class="fas fa-keyboard" style="margin-right: 8px;"></i>
+          Use <kbd>ESPAÇO</kbd> para pular. Colete itens, evite obstáculos e faça combos!
+        </footer>
+      </div>
+    </div>
+
+    <!-- Modal de Highscores -->
+    <div id="highscore-modal" class="modal hidden" aria-modal="true" role="dialog" aria-labelledby="highscore-title">
+      <div class="modal-content">
+        <button id="close-highscore" aria-label="Fechar Highscores">
+          <i class="fas fa-times"></i>
+        </button>
+        <header class="modal-header">
+          <i class="fas fa-trophy" style="margin-right: 18px; color: #ffd700;"></i>
+          <h2 id="highscore-title">Melhores Pontuações</h2>
+        </header>
+        <div class="highscore-container">
+          <ol id="highscore-list">
+            <!-- Exemplo de item:
+            <li><b>AAA</b><span>— 12345</span></li>
+            -->
+          </ol>
+          <div class="highscore-empty" style="display: none;">
+            <i class="fas fa-chart-line" style="font-size: 2em; margin-bottom: 16px; opacity: 0.5;"></i>
+            <p>Nenhuma pontuação registrada ainda.</p>
+            <p>Seja o primeiro a jogar!</p>
+          </div>
         </div>
-        <h3>Obstáculos</h3>
-        <div class="manual-grid obstacles">
-          <div class="manual-item"><span class="emoji">🐞</span><span>Bug<br>-1 vida</span></div>
-          <div class="manual-item"><span class="emoji">🚫</span><span>Erro 404<br>-1 vida</span></div>
-          <div class="manual-item"><span class="emoji">📱</span><span>Distração<br>-1 vida</span></div>
+      </div>
+    </div>
+
+    <!-- Modal Sobre -->
+    <div id="about-modal" class="modal hidden" aria-modal="true" role="dialog" aria-labelledby="about-title">
+      <div class="modal-content">
+        <button id="close-about" aria-label="Fechar Sobre">
+          <i class="fas fa-times"></i>
+        </button>
+        <header class="modal-header">
+          <i class="fas fa-info-circle" style="margin-right: 10px; color: #00fff7;"></i>
+          <h2 id="about-title">Sobre o Jogo</h2>
+        </header>
+        <div class="about-content">
+          <div class="about-team">
+            <h3><i class="fas fa-users" style="margin-right: 8px;"></i>Equipe de Desenvolvimento</h3>
+            <ul class="team-list">
+              <li> Hugo Camine</li>
+              <li> Fabio Costa</li>
+              <li> Luan Ferreira</li>
+              <li> Diogo Paim</li>
+            </ul>
+          </div>
+          <div class="about-institution">
+            <p><strong>FATEC Campinas  2025</strong></p>
+          </div>
         </div>
-        <p class="manual-controls">Use <b>ESPAÇO</b> para pular. Colete itens, evite obstáculos e faça combos!</p>
       </div>
     </div>
   </main>
+
   <script src="game.js"></script>
 </body>
 </html>

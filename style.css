@@ -10,31 +10,82 @@ body {
 
 header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 24px 40px 0 40px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 1.2em;
-  color: #00fff7;
-  text-shadow: 0 0 8px #00fff7, 0 0 2px #fff;
+  padding: 32px 40px 0 40px;
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
-#open-manual {
+.header-titles {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 220px;
+}
+
+.main-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.25em;
+  color: #00fff7;
+  text-shadow: 0 0 16px #00fff7, 0 0 2px #fff;
+  margin: 0 0 2px 0;
+  padding: 0;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  background: none;
+  border: none;
+  text-align: left;
+}
+
+.subtitle {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.85em;
+  color: #fff;
+  text-shadow: 0 0 8px #00fff7, 0 0 2px #fff;
+  letter-spacing: 2px;
+  margin: 0 0 0 2px;
+  padding: 0;
+  line-height: 1.1;
+  background: none;
+  border: none;
+  text-align: left;
+}
+
+#header-icons {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  margin-right: 0;
+  margin-top: 6px;
+}
+
+#header-icons button {
   background: #181c2b;
   color: #00fff7;
   border: 2px solid #00fff7;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  border-radius: 16px;
+  width: 48px;
+  height: 48px;
   font-size: 1.5em;
   cursor: pointer;
-  box-shadow: 0 0 8px #00fff7;
-  transition: background 0.2s;
+  box-shadow: 0 0 12px #00fff7;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
 }
 
-#open-manual:hover {
+#header-icons button:hover {
   background: #00fff7;
-  color: #181c2b;
+  color: #232946;
+  transform: scale(1.08);
+  box-shadow: 0 0 18px #00fff7;
 }
 
 main {
@@ -55,13 +106,45 @@ main {
   padding: 12px 32px;
   box-shadow: 0 0 16px #00fff7;
   z-index: 2;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-ui .ui-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.1em;
+  color: #fff;
+  background: none;
+  padding: 0 10px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+#game-ui .ui-icon {
+  font-size: 1.2em;
+  color: #00fff7;
+  margin-right: 4px;
+  text-shadow: 0 0 8px #00fff7, 0 0 2px #fff;
 }
 
 #game-ui .ui-label {
   color: #00fff7;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.8em;
+  font-size: 1em;
   margin-right: 4px;
+  letter-spacing: 1px;
+}
+
+#game-ui .ui-text {
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1em;
+  letter-spacing: 2px;
+  min-width: 32px;
+  text-align: left;
 }
 
 #lives {
@@ -76,6 +159,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 2;
 }
 
 #game-canvas {
@@ -90,33 +174,86 @@ main {
   height: auto;
 }
 
-#message-box {
-  position: relative;
-  left: 0;
-  top: 0;
-  margin: 32px auto 0 auto;
-  background: #181c2b;
+#pause-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 30;
+  background: #232946;
   color: #00fff7;
-  padding: 18px 32px 18px 32px;
-  border-radius: 12px 12px 0 0;
-  font-size: 1.2rem;
-  font-family: 'Fira Mono', 'Consolas', 'Courier New', monospace;
-  box-shadow: 0 -2px 24px rgba(0,0,0,0.18);
-  z-index: 1000;
-  min-width: 320px;
-  max-width: 900px;
-  width: 100%;
-  text-align: left;
-  pointer-events: auto;
-  border-top: 3px solid #00fff7;
-  border-bottom: none;
-  border-left: 3px solid #00fff7;
-  border-right: 3px solid #00fff7;
-  transition: background 0.2s, color 0.2s;
-  margin-bottom: 0;
+  border: 2px solid #00fff7;
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  font-size: 1.6em;
   display: flex;
   align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px #00fff7;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+#pause-btn:hover {
+  background: #00fff7;
+  color: #232946;
+  transform: scale(1.08);
+}
+
+#pause-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 25;
+  background: rgba(24,28,43,0.85);
+  pointer-events: none;
+}
+#pause-overlay.hidden {
+  display: none;
+}
+.pause-text {
+  color: #00fff7;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 3em;
+  text-shadow: 0 0 16px #00fff7, 0 0 2px #fff;
+  letter-spacing: 8px;
+}
+
+#message-box {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  width: 60vw;
+  max-width: 900px;
+  min-width: 320px;
+  z-index: 1;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 0 24px #00fff7bb;
+  background: #181c2b;
+  border: 3px solid #00fff7;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  padding: 24px 32px 16px 32px;
+  color: #00fff7;
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  opacity: 1;
+  pointer-events: auto;
+  margin: 0;
+  text-align: left;
   gap: 12px;
+  position: fixed;
+  box-sizing: border-box;
+}
+
+/* Esconde o terminal se algum modal ou end-screen estiver visível */
+.modal:not(.hidden) ~ #message-box,
+#end-screen:not(.hidden) ~ #message-box,
+#pause-overlay:not(.hidden) ~ #message-box {
+  display: none !important;
 }
 
 #message-box.bug-message {
@@ -154,13 +291,17 @@ main {
 }
 
 #close-message {
+  position: absolute;
+  top: 16px;
+  right: 16px;
   background: none;
   border: none;
   color: #00fff7;
-  font-size: 1.3em;
+  font-size: 2em;
   cursor: pointer;
-  margin-left: 8px;
-  padding: 0 6px;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
   border-radius: 50%;
   transition: background 0.2s, color 0.2s;
 }
@@ -320,7 +461,11 @@ main {
   text-align: center;
 }
 
-#close-manual {
+.modal-content h2 {
+  font-size: 1.5em;
+}
+
+#close-manual, #close-highscore, #close-about {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -329,6 +474,16 @@ main {
   color: #00fff7;
   font-size: 2em;
   cursor: pointer;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+}
+
+#close-manual:hover, #close-highscore:hover, #close-about:hover {
+  background: #00fff7;
+  color: #181c2b;
 }
 
 .manual-grid {
@@ -361,11 +516,219 @@ main {
   color: #00fff7;
 }
 
+/* Deixe o ícone do mesmo tamanho do h2 */
+.modal-header .modal-icon {
+  font-size: 1.5em;
+  vertical-align: middle;
+  margin-right: 18px;
+}
+
 .final-stats {
   margin: 18px 0 10px 0;
   font-size: 1.1em;
   color: #00fff7;
   font-family: 'Inter', Arial, sans-serif;
+}
+
+#highscore-list {
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.1em;
+  color: #00fff7;
+  list-style: none;
+  max-width: 350px;
+}
+
+#highscore-list li {
+  margin-bottom: 14px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px #00fff7, 0 0 2px #fff;
+  background: rgba(24,28,43,0.85);
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 1.1em;
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  align-items: center;
+  justify-items: center;
+  border: 2px solid #00fff7;
+  box-shadow: 0 0 8px #00fff744;
+  min-width: 220px;
+}
+
+#highscore-list li b {
+  color: #ffd700;
+  font-size: 1.2em;
+  font-family: inherit;
+  letter-spacing: 3px;
+  justify-self: end;
+}
+
+#highscore-list li span {
+  color: #fff;
+  font-size: 1em;
+  font-family: inherit;
+  justify-self: start;
+}
+
+#highscore-list li span:nth-child(2) {
+  color: #00fff7;
+  font-size: 1.2em;
+  font-weight: bold;
+  justify-self: center;
+}
+
+#highscore-list li span:last-child {
+  color: #fff;
+  font-size: 1.1em;
+  font-family: inherit;
+  justify-self: start;
+}
+
+#highscore-list li:first-child {
+  background: #ffd70022;
+  border-color: #ffd700;
+  color: #ffd700;
+  font-size: 1.2em;
+  box-shadow: 0 0 16px #ffd70088;
+}
+
+#highscore-list li:nth-child(2) {
+  background: #c0c0c022;
+  border-color: #c0c0c0;
+  color: #c0c0c0;
+}
+
+#highscore-list li:nth-child(3) {
+  background: #cd7f3222;
+  border-color: #cd7f32;
+  color: #cd7f32;
+}
+
+.highscore-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.highscore-empty {
+  text-align: center;
+  color: #fff;
+  font-family: 'Inter', Arial, sans-serif;
+  margin-top: 18px;
+}
+
+#about-modal p {
+  margin: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 1.1em;
+  color: #fff;
+  text-align: center;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1em;
+  padding: 12px 28px;
+  background: #00fff7;
+  color: #181c2b;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 0 8px #00fff7;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #00e6d2;
+  color: #181c2b;
+}
+
+/* Ajuste geral para ícones de header dos modais */
+.modal-header i,
+.modal-header .fa-book,
+.modal-header .fa-trophy,
+.modal-header .fa-info-circle {
+  font-size: 1.6em;
+  vertical-align: middle;
+  margin-right: 14px;
+  margin-top: -2px;
+  display: inline-block;
+  line-height: 1;
+}
+
+.modal-header h2 {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+  font-size: 1.35em;
+  line-height: 1.1;
+}
+
+/* Ajuste para ícones de listas internas do manual */
+.manual-item .emoji {
+  font-size: 2.6em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+/* Ajuste para ícones de obstáculos/itens no manual */
+.manual-item.bonus .emoji,
+.manual-item.obstacle .emoji {
+  font-size: 2.2em;
+  width: 1.3em;
+  height: 1.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ajuste para ícone do título das seções do manual */
+.manual-section h3 i {
+  font-size: 1.2em;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* Ajuste para ícone do título do highscore */
+#highscore-modal .modal-header i {
+  font-size: 1.5em;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
+/* Ajuste para ícone do título do about */
+#about-modal .modal-header i {
+  font-size: 1.5em;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
+/* Ajuste para responsividade dos ícones em telas pequenas */
+@media (max-width: 600px) {
+  .modal-header i,
+  .modal-header .fa-book,
+  .modal-header .fa-trophy,
+  .modal-header .fa-info-circle {
+    font-size: 1.2em;
+    margin-right: 8px;
+  }
+  .manual-item .emoji {
+    font-size: 1.6em;
+    width: 1.1em;
+    height: 1.1em;
+  }
 }
 
 @media (max-width: 1000px) {
@@ -375,9 +738,450 @@ main {
   #end-screen { min-width: 220px; padding: 18px 4vw; }
 }
 
+@media (max-width: 700px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 2vw 0 2vw;
+    font-size: 1.1em;
+  }
+  .header-titles {
+    align-items: center;
+    min-width: 0;
+  }
+  .main-title, .subtitle {
+    text-align: center;
+    width: 100%;
+  }
+  #header-icons {
+    margin-top: 10px;
+    gap: 12px;
+  }
+}
+
 @media (max-width: 600px) {
   header { flex-direction: column; padding: 12px 2vw 0 2vw; font-size: 1em; }
   #game-canvas { height: 140px; }
   .modal-content { min-width: 180px; }
   #end-screen { min-width: 120px; padding: 10px 2vw; }
+  #message-box {
+    width: 95vw;
+    min-width: 0;
+    padding: 12px 8px 8px 8px;
+    font-size: 0.95rem;
+  }
+}
+
+#about-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  width: 100%;
+  padding: 0;
+}
+#about-modal .modal-header i {
+  font-size: 1.6em;
+  margin: 0 10px 0 0;
+  vertical-align: middle;
+  color: #00fff7;
+  display: inline-block;
+  line-height: 1;
+  padding: 0;
+}
+#about-modal .modal-header h2 {
+  font-size: 1.45em;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  padding: 0;
+}
+@media (max-width: 600px) {
+  #about-modal .modal-header i {
+    font-size: 1.2em;
+    margin-right: 6px;
+  }
+  #about-modal .modal-header h2 {
+    font-size: 1.1em;
+  }
+}
+#about-modal .about-content {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#about-modal .about-institution p {
+  margin: 0;
+  font-size: 1.1em;
+  color: #fff;
+  text-align: center;
+  word-break: break-word;
+  white-space: normal;
+  max-width: 100%;
+}
+#about-modal .about-institution strong {
+  font-size: 1.15em;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 2px;
+  word-break: break-word;
+}
+@media (max-width: 600px) {
+  #about-modal .modal-header i {
+    font-size: 1.1em;
+    margin-right: 6px;
+  }
+  #about-modal .modal-header h2 {
+    font-size: 1.1em;
+  }
+  #about-modal .about-institution strong {
+    font-size: 1em;
+  }
+  #about-modal .about-institution p {
+    font-size: 0.95em;
+  }
+}
+
+/* --- RESTAURAÇÃO: manual-item e manual-grid para visual anterior --- */
+.manual-grid.items, .manual-grid.obstacles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 18px;
+  margin: 24px 0 16px 0;
+  justify-items: stretch;
+  align-items: stretch;
+}
+.manual-item {
+  background: #232946;
+  border-radius: 10px;
+  padding: 18px 8px 10px 8px;
+  box-shadow: 0 0 8px #00fff7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1em;
+  min-height: 90px;
+  min-width: 0;
+  max-width: none;
+  border: none;
+  margin: 0;
+  transition: none;
+}
+.manual-item .emoji {
+  font-size: 2.2em;
+  margin-bottom: 8px;
+  width: auto;
+  height: auto;
+}
+.manual-item .item-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.manual-item .item-info strong {
+  font-size: 1.13em;
+  color: #fff;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.manual-item .points, .manual-item .damage {
+  font-size: 1em;
+  color: #00fff7;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.manual-item.obstacle .damage {
+  color: #ff6b6b;
+}
+@media (max-width: 600px) {
+  .manual-item {
+    min-width: 0;
+    max-width: none;
+    min-height: 60px;
+    padding: 10px 4px 8px 4px;
+  }
+  .manual-item .emoji {
+    font-size: 1.3em;
+  }
+  .manual-item .item-info strong {
+    font-size: 0.95em;
+  }
+  .manual-item .points, .manual-item .damage {
+    font-size: 0.95em;
+  }
+}
+
+/* --- HIGHSCORE: texto e emoji do mesmo tamanho --- */
+#highscore-modal .modal-header i {
+  font-size: 1.2em;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+#highscore-title {
+  font-size: 1.35em;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  letter-spacing: 1px;
+}
+#highscore-list li b {
+  font-size: 1.2em;
+  font-family: 'Press Start 2P', monospace;
+  color: #ffd700;
+  letter-spacing: 2px;
+  display: inline-block;
+  vertical-align: middle;
+}
+#highscore-list li span {
+  font-size: 1.2em;
+  font-family: 'Press Start 2P', monospace;
+  color: #00fff7;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+  .manual-item {
+    min-width: 90px;
+    max-width: 120px;
+    min-height: 80px;
+    padding: 10px 4px 8px 4px;
+  }
+  .manual-item .emoji {
+    font-size: 1.3em;
+    width: 1em;
+    height: 1em;
+  }
+  .manual-item .item-info strong {
+    font-size: 0.95em;
+  }
+  .manual-item .points, .manual-item .damage {
+    font-size: 0.95em;
+  }
+}
+
+/* --- Headers dos modais: alinhamento centralizado e harmônico --- */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+.modal-header i {
+  font-size: 1.4em;
+  margin: 0 8px 0 0;
+  vertical-align: middle;
+  color: #00fff7;
+  display: inline-block;
+}
+.modal-header h2 {
+  font-size: 1.35em;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  letter-spacing: 1px;
+  line-height: 1.1;
+}
+
+/* Ajuste específico para o título do highscore para manter centralização */
+#highscore-modal .modal-header {
+  justify-content: center;
+  gap: 10px;
+}
+#highscore-title {
+  font-size: 1.35em;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  letter-spacing: 1px;
+  line-height: 1.1;
+}
+
+@media (max-width: 600px) {
+  .modal-header i {
+    font-size: 1.1em;
+    margin-right: 6px;
+  }
+  .modal-header h2, #highscore-title {
+    font-size: 1.1em;
+  }
+}
+
+/* Centralização e padronização visual arcade/neon para o modal Sobre */
+#about-modal .about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 18px;
+  margin-top: 18px;
+}
+#about-modal .about-game,
+#about-modal .about-team,
+#about-modal .about-institution {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(24,28,43,0.92);
+  border-radius: 12px;
+  box-shadow: 0 0 12px #00fff7cc;
+  padding: 18px 12px 14px 12px;
+  margin-bottom: 0;
+}
+#about-modal .about-game h3,
+#about-modal .about-team h3,
+#about-modal .about-institution h3 {
+  font-family: 'Press Start 2P', monospace;
+  color: #00fff7;
+  font-size: 1.08em;
+  text-shadow: 0 0 8px #00fff7, 0 0 2px #fff;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+#about-modal .about-game p,
+#about-modal .about-team ul,
+#about-modal .about-institution p {
+  text-align: center;
+  color: #fff;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 1.08em;
+  margin: 0 0 6px 0;
+  word-break: break-word;
+  white-space: normal;
+  width: 100%;
+}
+#about-modal .about-team ul.team-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+#about-modal .about-team ul.team-list li {
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 1.05em;
+  color: #00fff7;
+  text-shadow: 0 0 4px #00fff7;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+#about-modal .about-institution strong {
+  font-size: 1.13em;
+  color: #00fff7;
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 2px;
+  word-break: break-word;
+  text-align: center;
+  text-shadow: 0 0 8px #00fff7, 0 0 2px #fff;
+}
+#about-modal .about-institution p {
+  font-size: 1.08em;
+  color: #fff;
+  text-align: center;
+  margin: 0 0 2px 0;
+  word-break: break-word;
+  white-space: normal;
+  max-width: 100%;
+}
+@media (max-width: 600px) {
+  #about-modal .about-content {
+    gap: 10px;
+    margin-top: 8px;
+  }
+  #about-modal .about-game,
+  #about-modal .about-team,
+  #about-modal .about-institution {
+    max-width: 98vw;
+    padding: 10px 2vw 8px 2vw;
+  }
+  #about-modal .about-game h3,
+  #about-modal .about-team h3,
+  #about-modal .about-institution h3 {
+    font-size: 0.95em;
+  }
+  #about-modal .about-institution strong {
+    font-size: 0.98em;
+  }
+  #about-modal .about-institution p {
+    font-size: 0.95em;
+  }
+}
+
+/* Alinha perfeitamente o header dos modais Manual e Highscore (ícone + texto) */
+#manual-modal .modal-header,
+#highscore-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  width: 100%;
+  padding: 0;
+}
+#manual-modal .modal-header i,
+#highscore-modal .modal-header i {
+  font-size: 1.6em;
+  margin: 0 10px 0 0;
+  vertical-align: middle;
+  color: #00fff7;
+  display: inline-block;
+  line-height: 1;
+  padding: 0;
+}
+#manual-modal .modal-header h2,
+#highscore-modal .modal-header h2 {
+  font-size: 1.45em;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  padding: 0;
+}
+@media (max-width: 600px) {
+  #manual-modal .modal-header i,
+  #highscore-modal .modal-header i {
+    font-size: 1.2em;
+    margin-right: 6px;
+  }
+  #manual-modal .modal-header h2,
+  #highscore-modal .modal-header h2 {
+    font-size: 1.1em;
+  }
 }

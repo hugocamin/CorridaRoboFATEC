@@ -3,10 +3,11 @@ class BitsRushGame {
     this.canvas = document.getElementById('game-canvas');
     this.ctx = this.canvas.getContext('2d');
     
-    // UI Elements
-    this.scoreEl = document.querySelector('#score .ui-text');
-    this.comboEl = document.querySelector('#combo .ui-text');
-    this.livesEl = document.querySelector('#lives .ui-text');
+    // UI Elements (ajustado para nova estrutura)
+    const uiItems = document.querySelectorAll('#game-ui .ui-item');
+    this.scoreEl = Array.from(uiItems).find(item => item.querySelector('.ui-label')?.textContent.trim().toLowerCase() === 'score')?.querySelector('.ui-text');
+    this.comboEl = Array.from(uiItems).find(item => item.querySelector('.ui-label')?.textContent.trim().toLowerCase() === 'combo')?.querySelector('.ui-text');
+    this.livesEl = Array.from(uiItems).find(item => item.querySelector('.ui-label')?.textContent.trim().toLowerCase() === 'vidas')?.querySelector('.ui-text');
     this.messageBox = document.getElementById('message-box');
     this.messageText = document.getElementById('message-text');
     this.startScreen = document.getElementById('start-screen');
@@ -20,6 +21,14 @@ class BitsRushGame {
     this.openManual = document.getElementById('open-manual');
     this.closeManual = document.getElementById('close-manual');
     this.manualModal = document.getElementById('manual-modal');
+    this.openHighscore = document.getElementById('open-highscore');
+    this.closeHighscore = document.getElementById('close-highscore');
+    this.highscoreModal = document.getElementById('highscore-modal');
+    this.highscoreList = document.getElementById('highscore-list');
+    this.openAbout = document.getElementById('open-about');
+    this.closeAbout = document.getElementById('close-about');
+    this.aboutModal = document.getElementById('about-modal');
+    this.pauseBtn = document.getElementById('pause-btn');
 
     // Game State
     this.gameState = {
@@ -60,8 +69,8 @@ class BitsRushGame {
 
     // Game configurations
     this.config = {
-      gravity: 0.8,
-      jumpForce: -15,
+      gravity: 1.4,
+      jumpForce: 0.5,
       groundOffset: 40,
       spawnRates: {
         obstacle: 0.015,
@@ -79,19 +88,21 @@ class BitsRushGame {
 
     this.obstacleTypes = [
       { emoji: '🐞', name: 'Bug', color: '#ff0044', damage: 1 },
-      { emoji: '🚫', name: 'Erro 404', color: '#ff0055', damage: 1 },
-      { emoji: '📱', name: 'Distração', color: '#ff3366', damage: 1 }
+      { emoji: '🚫', name: 'Erro 404', color: '#ff0055', damage: 1 }
     ];
 
     this.itemTypes = [
-      { emoji: '💡', name: 'Lógica de Programação', points: 15, message: 'Lógica de Programação!' },
-      { emoji: '🧠', name: 'Raciocínio Lógico', points: 20, message: 'Raciocínio Lógico!' },
-      { emoji: '📚', name: 'Estrutura de Dados', points: 25, message: 'Estrutura de Dados!' },
+      { emoji: '💡', name: 'Lógica de Programação', points: 20, message: 'Lógica de Programação!' },
+      { emoji: '💻', name: 'Arquitetura e Organização de Computadores', points: 23, message: 'Arquitetura e Organização de Computadores!' },
+      { emoji: '🖥️', name: 'Sistemas operacionais', points: 21, message: 'Sistemas Operacionais!' },
+      { emoji: '💻', name: 'Programação Scripts', points: 21, message: 'Programação Scripts!' },
+      { emoji: '📚', name: 'Estrutura de Dados', points: 23, message: 'Estrutura de Dados!' },
+      { emoji: '🖥️', name: 'Sistemas de Informação', points: 23, message: 'Sistemas de Informação' },
       { emoji: '🗄️', name: 'Banco de Dados', points: 18, message: 'Banco de Dados!' },
       { emoji: '🔢', name: 'Matemática', points: 17, message: 'Matemática!' },
-      { emoji: '📐', name: 'Algoritmos', points: 22, message: 'Algoritmos!' },
+      { emoji: '💡', name: 'Algoritmos', points: 22, message: 'Algoritmos!' },
       { emoji: '🌐', name: 'Redes de Computadores', points: 19, message: 'Redes de Computadores!' },
-      { emoji: '🛠️', name: 'Engenharia de Software', points: 21, message: 'Engenharia de Software!' }
+      { emoji: '💻', name: 'Engenharia de Software', points: 21, message: 'Engenharia de Software!' }
     ];
 
     // Mensagens humoradas para colisão com bugs
@@ -99,7 +110,7 @@ class BitsRushGame {
       'O código bugou! 💥',
       'Deu tela azul! 😵',
       'Bug detectado! 🐞',
-      'Erro 404: habilidade não encontrada! 🚫',
+      'PC desligou e você não salvou o codigo! 💻❌',
       'O robô tropeçou no bug! 🤖🐛',
       'Stack overflow! 🥴',
       'Exceção não tratada! ⚠️',
@@ -111,22 +122,34 @@ class BitsRushGame {
     this.itemMessages = {
       'Lógica de Programação': [
         'Você pensou como um computador! 💡',
-        'Lógica afiada, mente brilhante! 🤓',
-        'Desvendou o enigma do código! 🔍',
+        'Onde tudo começa! 💻',
+        'Não esqueça do ; 🔍',
         'Programador raiz detectado! 👾'
       ],
-      'Raciocínio Lógico': [
-        'Raciocínio de mestre! 🧠',
-        'Você conectou os pontos! 🔗',
-        'Que mente lógica! 🧩',
-        'Desafio lógico vencido! 🏆',
-        'Variavel de sucesso! 📈'
+      'Arquitetura e Organização de Computadores': [
+        'CPU ficou até orgulhosa! 🖥️',
+        'Você decifrou o segredo dos chips! 🧩',
+        'Cache cheio de vitórias! 💾'
+      ],
+      'Sistemas operacionais': [
+        'Kernel aplaudiu sua coleta! 🖥️',
+        'Processo promovido a prioridade máxima! 🚦',
+        'Você deu boot na diversão! 🔄'
+      ],
+      'Programação Scripts': [
+        'Script rodou de primeira, nem parece verdade! 📜',
+        'Linha por linha, você dominou o script! 📝',
+        'Python ou JS?'
       ],
       'Estrutura de Dados': [
         'Organização é tudo! 📚',
         'Você empilhou conhecimento! 🥞',
         'Árvore binária? Fácil! 🌳',
         'Listou mais uma vitória! 📋'
+      ],
+      'Sistemas de Informação': [
+        'Informação processada com sucesso! 💾',
+        'Relatório de vitória gerado! 📑'
       ],
       'Banco de Dados': [
         'Você fez uma consulta perfeita! 📊',
@@ -179,11 +202,9 @@ class BitsRushGame {
       if (closeBtn) {
         closeBtn.onclick = () => this.hideMessage();
       }
-      // Mostra histórico ao clicar no balão
-      this.messageBox.onclick = (e) => {
-        if (e.target === closeBtn) return;
-        this.messageBox.classList.toggle('show-history');
-      };
+      // Remove a opção de abrir o histórico ao clicar no balão
+      // (não faz mais nada ao clicar no messageBox)
+      this.messageBox.onclick = null;
     }, 500);
   }
 
@@ -200,12 +221,12 @@ class BitsRushGame {
       console.log('Sprites finais carregados:', this.robot.finalSprites);
       // Carregar sons
       this.sounds = {
-        jump: new Audio('assets/sounds/jump.wav'),
-        collect: new Audio('assets/sounds/collect.wav'),
-        hit: new Audio('assets/sounds/hit.wav')
+        jump: new Audio('assets/bgm/pulo.mp3'),
+        collect: new Audio('assets/bgm/coletarponto.mp3'),
+        hit: new Audio('assets/bgm/hit.mp3')
       };
       // Música de fundo
-      this.music = new Audio('assets/sounds/music.mp3');
+      this.music = new Audio('assets/bgm/fundo.mp3');
       this.music.loop = true;
     } catch (error) {
       console.warn('Some assets failed to load:', error);
@@ -243,10 +264,15 @@ class BitsRushGame {
     // Manual modal
     this.openManual.addEventListener('click', () => {
       this.manualModal.classList.remove('hidden');
+      if (this.messageBox) this.messageBox.classList.add('hidden');
     });
     
     this.closeManual.addEventListener('click', () => {
       this.manualModal.classList.add('hidden');
+      // Só mostra o terminal se nenhum modal estiver aberto
+      if (this.messageBox && this.endScreen.classList.contains('hidden')) {
+        this.messageBox.classList.remove('hidden');
+      }
     });
     
     // Canvas focus for keyboard input
@@ -256,6 +282,37 @@ class BitsRushGame {
     
     // Resize handler
     window.addEventListener('resize', () => this.resizeCanvas());
+
+    if (this.openHighscore && this.highscoreModal && this.closeHighscore) {
+      this.openHighscore.onclick = () => {
+        this.highscoreModal.classList.remove('hidden');
+        this.updateHighscoreList();
+        if (this.messageBox) this.messageBox.classList.add('hidden');
+      };
+      this.closeHighscore.onclick = () => {
+        this.highscoreModal.classList.add('hidden');
+        if (this.messageBox && this.endScreen.classList.contains('hidden') && this.manualModal.classList.contains('hidden')) {
+          this.messageBox.classList.remove('hidden');
+        }
+      };
+    }
+    if (this.openAbout && this.aboutModal && this.closeAbout) {
+      this.openAbout.onclick = () => {
+        this.aboutModal.classList.remove('hidden');
+        if (this.messageBox) this.messageBox.classList.add('hidden');
+      };
+      this.closeAbout.onclick = () => {
+        this.aboutModal.classList.add('hidden');
+        if (this.messageBox && this.endScreen.classList.contains('hidden') && this.manualModal.classList.contains('hidden')) {
+          this.messageBox.classList.remove('hidden');
+        }
+      };
+    }
+    if (this.pauseBtn) {
+      this.pauseBtn.onclick = () => {
+        this.togglePause();
+      };
+    }
   }
 
   handleKeydown(e) {
@@ -306,7 +363,7 @@ class BitsRushGame {
     
     // Update config based on canvas size
     this.config.gravity = this.canvas.height * 0.001;
-    this.config.jumpForce = -this.canvas.height * 0.015; // Pulo ainda mais baixo
+    this.config.jumpForce = -this.canvas.height * 0.045; // Pulo mais baixo e proporcional
   }
 
   getGroundY() {
@@ -349,6 +406,10 @@ class BitsRushGame {
   restartGame() {
     this.resetGame();
     this.startGame();
+    // Só mostra o terminal se nenhum modal estiver aberto
+    if (this.messageBox && this.manualModal.classList.contains('hidden')) {
+      this.messageBox.classList.remove('hidden');
+    }
   }
 
   updateUI() {
@@ -386,9 +447,13 @@ class BitsRushGame {
 
   spawnObstacle() {
     if (this.obstacles.length >= this.config.maxEntities.obstacles) return;
-    
+    // Garante distância mínima do último obstáculo
+    const minDistance = this.robot.width * 2.5; // distância mínima em pixels (2.5x largura do robô)
+    if (this.obstacles.length > 0) {
+      const lastObstacle = this.obstacles[this.obstacles.length - 1];
+      if (lastObstacle.x > this.canvas.width - minDistance) return;
+    }
     const type = this.obstacleTypes[Math.floor(Math.random() * this.obstacleTypes.length)];
-    // Obstáculo no chão: base alinhada ao chão do robô
     const obstacleY = this.getGroundY() + (this.robot.height - 48); // 48 = altura do obstáculo
     const obstacle = new Obstacle(
       this.canvas.width + 10,
@@ -396,7 +461,6 @@ class BitsRushGame {
       type,
       this.config.speeds.obstacle * this.gameState.difficulty
     );
-    
     this.obstacles.push(obstacle);
   }
 
@@ -419,6 +483,7 @@ class BitsRushGame {
   }
 
   updateGameLogic() {
+    if (this.gameState.paused) return;
     if (!this.gameState.gameStarted || this.gameState.gameOver) return;
     
     // Dificuldade progressiva ainda mais suave para bugs
@@ -572,7 +637,7 @@ class BitsRushGame {
     
     // Ground
     this.ctx.fillStyle = '#00fff7';
-    this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 8);
+    this.ctx.fillRect(0, this.canvas.height - 20, 8, 8);
     
     // Ground lines
     for (let i = 0; i < 6; i++) {
@@ -648,27 +713,105 @@ class BitsRushGame {
   showEndScreen() {
     this.finalScoreEl.textContent = this.gameState.score.toLocaleString();
     this.maxComboEl.textContent = this.gameState.maxCombo;
-    
-    // Animate final mascot
-    this.animateFinalMascot();
-    
+    this.stopFinalMascotAnimation();
+    this.startFinalMascotAnimation();
     this.endScreen.classList.remove('hidden');
+    if (this.messageBox) this.messageBox.classList.add('hidden');
+    this.checkHighscore();
   }
 
-  animateFinalMascot() {
-    // Suaviza o loop: faz ida e volta (ping-pong) na animação
-    if (!this.endScreen.classList.contains('hidden') && this.robot.finalSprites.length > 0 && this.finalMascotImg) {
-      const sprite = this.robot.finalSprites[this.robot.finalFrame];
-      this.finalMascotImg.src = sprite ? sprite.src : this.assetPaths.finalSprites[0];
-      // Atualiza frame para animação ping-pong
-      this.robot.updateFinalAnimationPingPong();
-      setTimeout(() => this.animateFinalMascot(), this.robot.finalFrameInterval * 2); // Mais lento e perceptível
+  checkHighscore() {
+    let highscores = JSON.parse(localStorage.getItem('bitsrush_highscores') || '[]');
+    const minScore = highscores.length < 5 ? 0 : highscores[4].score;
+    if (this.gameState.score > minScore || highscores.length < 5) {
+      setTimeout(() => {
+        let initials = '';
+        while (!initials || initials.length < 1) {
+          initials = prompt('Parabéns! Novo Highscore! Digite suas iniciais (3 letras):', '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0,3);
+          if (initials === null) return; // Cancelou
+        }
+        highscores.push({ initials, score: this.gameState.score });
+        highscores = highscores.sort((a, b) => b.score - a.score).slice(0, 5);
+        localStorage.setItem('bitsrush_highscores', JSON.stringify(highscores));
+        this.updateHighscoreList();
+      }, 500);
     } else {
-      console.warn('Não foi possível animar o mascote final:', {
-        endScreenHidden: this.endScreen.classList.contains('hidden'),
-        finalSpritesLength: this.robot.finalSprites.length,
-        finalMascotImg: !!this.finalMascotImg
-      });
+      this.updateHighscoreList();
+    }
+  }
+
+  updateHighscoreList() {
+    const highscores = JSON.parse(localStorage.getItem('bitsrush_highscores') || '[]');
+    if (this.highscoreList) {
+      this.highscoreList.innerHTML = highscores.map((h, i) =>
+        `<li><b>${h.initials}</b><span>—</span><span>${h.score}</span></li>`
+      ).join('') || '<li>Nenhum score ainda!</li>';
+    }
+    // Exibe/oculta mensagem de vazio
+    const emptyDiv = document.querySelector('.highscore-empty');
+    if (emptyDiv) {
+      emptyDiv.style.display = highscores.length === 0 ? 'block' : 'none';
+    }
+    // Corrige alinhamento torto: força todos os spans a terem largura mínima
+    const spans = this.highscoreList?.querySelectorAll('li span');
+    if (spans) {
+      spans.forEach(span => { span.style.minWidth = '60px'; span.style.display = 'inline-block'; span.style.textAlign = 'center'; });
+    }
+  }
+
+  // Controla animação do mascote final para evitar múltiplas execuções
+  startFinalMascotAnimation() {
+    if (!this.robot.finalSprites.length || !this.finalMascotImg) return;
+    this._finalMascotAnimFrame = 0;
+    this._finalMascotAnimDir = 1;
+    this._finalMascotAnimLastTime = 0;
+    this._finalMascotAnimReq = requestAnimationFrame(this._finalMascotAnimLoop.bind(this));
+    // Diminui o mascote final
+    this.finalMascotImg.style.width = '120px';
+    this.finalMascotImg.style.height = '120px';
+    this.finalMascotImg.style.maxWidth = '120px';
+    this.finalMascotImg.style.maxHeight = '120px';
+  }
+
+  stopFinalMascotAnimation() {
+    if (this._finalMascotAnimReq) {
+      cancelAnimationFrame(this._finalMascotAnimReq);
+      this._finalMascotAnimReq = null;
+    }
+    // Mostra o terminal novamente ao fechar o modal
+    if (this.messageBox) this.messageBox.classList.remove('hidden');
+    // (Opcional) Restaura tamanho padrão do mascote final
+    if (this.finalMascotImg) {
+      this.finalMascotImg.style.width = '';
+      this.finalMascotImg.style.height = '';
+      this.finalMascotImg.style.maxWidth = '';
+      this.finalMascotImg.style.maxHeight = '';
+    }
+  }
+
+  _finalMascotAnimLoop(ts) {
+    // Velocidade natural: troca de frame a cada ~120ms
+    const interval = 120; // ms
+    if (!this._finalMascotAnimLastTime) this._finalMascotAnimLastTime = ts;
+    if (ts - this._finalMascotAnimLastTime >= interval) {
+      this._finalMascotAnimFrame += this._finalMascotAnimDir;
+      if (this._finalMascotAnimFrame >= this.robot.finalSprites.length - 1) {
+        this._finalMascotAnimFrame = this.robot.finalSprites.length - 1;
+        this._finalMascotAnimDir = -1;
+      } else if (this._finalMascotAnimFrame <= 0) {
+        this._finalMascotAnimFrame = 0;
+        this._finalMascotAnimDir = 1;
+      }
+      this._finalMascotAnimLastTime = ts;
+    }
+    // Atualiza sprite
+    const sprite = this.robot.finalSprites[this._finalMascotAnimFrame];
+    this.finalMascotImg.src = sprite ? sprite.src : this.assetPaths.finalSprites[0];
+    // Só continua animando se tela final visível
+    if (!this.endScreen.classList.contains('hidden')) {
+      this._finalMascotAnimReq = requestAnimationFrame(this._finalMascotAnimLoop.bind(this));
+    } else {
+      this.stopFinalMascotAnimation();
     }
   }
 
@@ -708,6 +851,18 @@ class BitsRushGame {
       this.music.currentTime = 0;
     }
   }
+
+  togglePause() {
+    if (!this.gameState) return;
+    this.gameState.paused = !this.gameState.paused;
+    if (this.gameState.paused) {
+      this.music && this.music.pause();
+      this.showMessage('Jogo pausado.', 999999);
+    } else {
+      this.music && this.music.play();
+      this.hideMessage();
+    }
+  }
 }
 
 // Robot class
@@ -715,8 +870,8 @@ class Robot {
   constructor() {
     this.x = 80;
     this.y = 0;
-    this.width = 80;
-    this.height = 80;
+    this.width = 100; // Tamanho fixo igual ao mascote final
+    this.height = 100; // Tamanho fixo igual ao mascote final
     this.vy = 0;
     this.isJumping = false;
     this.frame = 0;
@@ -732,8 +887,9 @@ class Robot {
   }
 
   updateSize(canvasHeight) {
-    this.height = Math.max(100, Math.floor(canvasHeight * 0.25)); // Aumenta tamanho mínimo e percentual
-    this.width = this.height;
+    // Mantém o personagem principal sempre com 100x100px (igual mascote final)
+    this.height = 100;
+    this.width = 100;
   }
 
   resetPosition(groundY) {
@@ -753,15 +909,24 @@ class Robot {
   jump() {
     if (!this.isJumping) {
       this.isJumping = true;
-      this.vy = -15;
+      this.vy = window.game?.config?.jumpForce ?? -7; // Usa o novo jumpForce
     }
   }
 
   update(groundY, gravity) {
     if (this.isJumping) {
-      this.vy += gravity;
+      // Suaviza a queda: aplica gravidade menor na descida
+      if (this.vy > 0) {
+        this.vy += gravity * 0.55; // queda mais suave
+      } else {
+        this.vy += gravity; // subida normal
+      }
       this.y += this.vy;
-      
+      // Impede de sair do topo da tela
+      if (this.y < 0) {
+        this.y = 0;
+        this.vy = 0;
+      }
       if (this.y >= groundY) {
         this.y = groundY;
         this.vy = 0;
@@ -809,7 +974,7 @@ class Robot {
     if (typeof this.finalFrameTimer === 'undefined') this.finalFrameTimer = 0;
     this.finalFrame += this._pingpongDir;
     if (this.finalFrame >= this.finalSprites.length - 1) {
-      this.finalFrame = this.finalSprites.length - 1;
+      this.finalFrame = this.robot.finalSprites.length - 1;
       this._pingpongDir = -1;
     } else if (this.finalFrame <= 0) {
       this.finalFrame = 0;
@@ -849,8 +1014,18 @@ class Obstacle {
 
   draw(ctx) {
     if (this.type.emoji) {
-      ctx.font = '40px Arial';
-      ctx.fillText(this.type.emoji, this.x, this.y + this.height - 8);
+      ctx.save();
+      ctx.font = '48px Arial'; // Proporção mais harmônica
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = '#00fff7';
+      ctx.shadowBlur = 1;
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 5;
+      ctx.strokeText(this.type.emoji, this.x + this.width/2, this.y + this.height/2);
+      ctx.fillText(this.type.emoji, this.x + this.width/2, this.y + this.height/2);
+      ctx.shadowBlur = 0;
+      ctx.restore();
     }
   }
 }
@@ -874,8 +1049,18 @@ class Item {
 
   draw(ctx) {
     const bounceOffset = Math.sin(this.bounce) * 3;
-    ctx.font = '32px Arial';
-    ctx.fillText(this.type.emoji, this.x, this.y + this.height - 8 + bounceOffset);
+    ctx.save();
+    ctx.font = '36px Arial'; // Proporção mais harmônica
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = '#fff200';
+    ctx.shadowBlur = 2;
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 4;
+    ctx.strokeText(this.type.emoji, this.x + this.width/2, this.y + this.height/2 + bounceOffset);
+    ctx.fillText(this.type.emoji, this.x + this.width/2, this.y + this.height/2 + bounceOffset);
+    ctx.shadowBlur = 0;
+    ctx.restore();
   }
 }
 
